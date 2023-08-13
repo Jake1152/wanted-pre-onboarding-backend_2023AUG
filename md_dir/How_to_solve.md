@@ -25,9 +25,8 @@
 - DB필요 
     회원 Table, 게시글 table
     - 회원 table
-        - ID (PK)
+        - Email (PK)
         - PWD
-        - Email
     - 게시글 table
         - 게시글 ID (PK)
         - 게시글 내용
@@ -38,9 +37,60 @@
         
 1. 회원가입 엔드포인트
     - 회원가입 기능 제공 찾아보기
-    
+        - 회원가입 엔드포인트 보안 여부
+        - https://lakelouise.tistory.com/232
+        - https://backend-intro.vlpt.us/3/
+    - 예정 endpoint
+        https://localhost:4242/user/signup
+    - email, pwd validation
+        - email
+            - @
+            - duplicate
+        - pwd
+            - 8자 이상
+    - password 암호화하여 DB에 저장
+    - JWT
+    - security
+        - spring에서는 따로 제공하는데 node에서는 어떻게 할 수 있는가?
 
+2. 사용자 로그인 엔드포인트 
+    https://localhost:4242/user/signup
+    - 사용자가 올바른 이메일과 비밀번호를 제공하는가
+    - 사용자 인증 마친 이후 JWT를 생성하여 사용자에게 반환
+    - 이메일, 비밀번호 유효성 검사
 
+3. 새로운 게시글 생성하는 엔드포인트
+    - 제목, 내용이 중복이더라도 생성
+    - 생성된 데이터를 DB에 저장한다.
+        DB 저장할 수 있는 최대 길이는 어떻게되는가?
+        65,535 byte
+        2 ^ 16
+
+4. 게시글 목록 조회 엔드포인트
+    - pagination 기능 구현
+    - 구현 방법 참조
+    - api
+    - 예외처리 조건
+        - 가장 마지막 페이지
+        - 아무 페이지도 없다면?
+
+5. 특정 게시글을 조회하는 엔드포인트
+    - 게시글 ID를 토대로 검색
+    - (option)게시글 제목, 내용을 토대로 검색
+
+6. 특정 게시글을 수정하는 엔드포인트
+    - 게시글의 ID와 수정 내용을 받아 해당 게시글을 수정하는 엔드포인트
+        - 게시글을 작성자만 수정가능
+        - HTTP PUT Method를 이용해서 수정한다.
+
+7. 특정 게시글 삭제하는 엔드포인트
+    - ID는 지정한 특정 숫자부터 시작
+        - 1
+        - 42
+        - etc
+    - 게시글 ID를 받아서 해당 개시글 삭제
+        - 게시글을 작성자만 삭제가능
+        - HTTP DELETE Method 이용
 
 # 검증
 
