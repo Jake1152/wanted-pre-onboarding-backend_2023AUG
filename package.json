@@ -4,7 +4,8 @@
   "description": "## Name",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon app"
+    "dev": "nodemon app",
+    "start": "node app"
   },
   "repository": {
     "type": "git",

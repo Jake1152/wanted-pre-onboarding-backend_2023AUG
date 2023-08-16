@@ -38,6 +38,13 @@ const User = sequelize.define('User', {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 
+/** 1. 회원가입 엔드포인트
+ * req에서 email, pwd 확인
+ * email 중복여부, 유효성 검사('@'이 있는가?)
+ * pwd 길이
+ * JWT 제공
+ ** 어떻게해야 보안적으로 좀더 안정적인가
+ */
 app.post('/signup', async (req, res) => {
     const { email, password } = req.body;
 
@@ -83,23 +90,6 @@ app.listen(app.get('port'), () => {
     console.log(`Server is listening on port ${app.get('port')}`);
 });
 
-// // To be added logger
-// app.get('/', (req, res) => {
-//    console.log("route");
-//    res.send('Route');
-// });
-
-// /** 1. 회원가입 엔드포인트
-//  * req에서 email, pwd 확인
-//  * email 중복여부, 유효성 검사('@'이 있는가?)
-//  * pwd 길이
-//  * JWT 제공
-//  ** 어떻게해야 보안적으로 좀더 안정적인가
-//  */
-// app.post('/user/signup', (req, res) => {
-//    // req.
-// });
-
 // /** 2. login endpoint
 //  * req에서 email, pwd 확인
 //  * email 중복여부, 유효성 검사('@'이 있는가?)
@@ -107,7 +97,7 @@ app.listen(app.get('port'), () => {
 //  * JWT 제공
 //  ** 어떻게해야 보안적으로 좀더 안정적인가
 //  */
-// app.get('/user/login', (req, res) => {
+// app.get('/login', (req, res) => {
    
 // });
 
