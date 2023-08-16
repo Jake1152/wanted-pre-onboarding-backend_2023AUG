@@ -1,52 +1,84 @@
 const express = require('express');
-const sequelize = require('./database');
+const mysql = require('mysql2');
+const Sequelize = require('sequelize');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const app = express();
-const port = 3000;
+const PORT = 4242;
+// const SALT_ROUNDS = 10;
+// const CREATED = 201;
+const BAD_REQUEST = 400;
+// const INTERNAL_SERVER_ERROR = 500;
 
-// Define User model
-const User = require('./User');
+app.set('port', process.env.PORT || PORT);
 
-// Middlewares
+
+// const sequelize = new Sequelize(process.env.DB_NAME,
+//                                 process.env.DB_USER, 
+//                                 process.DB_PASSWORD, {
+//                                     host: process.env.DB_HOST,
+//                                     dialect: 'mysql',
+//                                 }
+//                         );
+
+// const User = sequelize.define('User', {
+//                                     email: {
+//                                         type: Sequelize.STRING,
+//                                         unique: true,
+//                                         allwoNull: false,
+//                                     },
+//                                     password: {
+//                                         type: Sequelize.STRING,
+//                                         allowNull: false,
+//                                     },
+//                                 });
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true}));
 
-// Signup endpoint
-app.post('/signup', async (req, res) => {
-  const { email, password } = req.body;
+// app.post('/signup', async (req, res) => {
+//     const { email, password } = req.body;
 
-  // Validate email format
-  if (!email || !email.includes('@')) {
-    return res.status(400).json({ error: 'Invalid email format' });
-  }
+//     if (!email || !email.includes('@')) {
+//         return res.status(BAD_REQUEST).json({ error: 'Invalild email format' });
+//     }
 
-  // Validate password length
-  if (!password || password.length < 8) {
-    return res.status(400).json({ error: 'Password must be at least 8 characters long' });
-  }
+//     if (!password || !password.length < 8) {
+//         return res.status(BAD_REQUEST).json({ error: 'Password must be at least 8 characters long' });
+//     }
 
-  try {
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+//     try {
+//         const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+//         const newUser = await User.create({ email, password: hashedPassword });
+//         const accessToken = jwt.sign({ userId: newUser.id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '5m' });
+//         const refreshToken = jwt.sign({ userId: newUser.id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
 
-    // Create user in the database
-    const newUser = await User.create({ email, password: hashedPassword });
+//         return res.status(CREATED).json({ message: 'Signup successful', accessToken, refreshToken });
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(INTERNAL_SERVER_ERROR).json({ error: 'Internal server error' });
+//     }
+// });
 
-    // Generate JWT tokens
-    const accessToken = jwt.sign({ userId: newUser.id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
-    const refreshToken = jwt.sign({ userId: newUser.id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
+// app.use((req, res, next) => {
+//     console.log("everything will be in here\n");
+//     next();
+// });
 
-    return res.status(201).json({ message: 'Signup successful', accessToken, refreshToken });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: 'Internal server error' });
-  }
+app.get('/', (req, res) => {
+    res.send("Hello");
 });
 
-app.listen(port, async () => {
-  console.log(`Server is listening on port ${port}`);
-  await sequelize.sync(); // Sync database models with the database schema
+/**
+ * error handle
+ */
+app.use((err, req, res, next) => {
+    console.error(err);
+    res.status(BAD_REQUEST).send('error handle in error middle-ware');
+});
+
+app.listen(app.get('port'), () => {
+    console.log(`Server is listening on port ${app.get('port')}`);
 });
